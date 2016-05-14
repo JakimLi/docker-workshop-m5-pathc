@@ -1,0 +1,72 @@
+### demo_services.rules ###
+
+# Alert for Review service has no registered instances for >30 seconds.
+ALERT ReviewServiceNoInstances
+  IF absent(max_over_time(consul_health_service_status{service="review-service-admin"}[30s])) == 1
+    FOR 30s
+    LABELS {
+        severity="page"
+    }
+ANNOTATIONS {
+    summary = "Review service has no registered instances",
+    description = "All instances of review service have been down for more than 30 seconds."
+}
+
+# Alert for Review service healthy count dropping below acceptable threshold for >30 seconds.
+ALERT ReviewServiceHealthWarning
+  IF sum by (service) (max_over_time(consul_health_service_status{service="review-service-admin"}[30s])) < 2
+    FOR 30s
+    LABELS {
+        severity="page"
+    }
+ANNOTATIONS {
+    summary = "Review service becoming unhealthy",
+    description = "Only {{$value}} healthy review instances available for more than 30 seconds."
+}
+
+# Alert for Catalogue service has no registered instances for >30 seconds.
+ALERT CatalogueServiceNoInstances
+  IF absent(max_over_time(consul_health_service_status{service="catalogue-service-admin"}[30s])) == 1
+    FOR 30s
+    LABELS {
+        severity="page"
+    }
+ANNOTATIONS {
+    summary = "Catalogue service has no registered instances",
+    description = "All instances of catalogue service have been down for more than 30 seconds."
+}
+# Alert for Catalogue service healthy count dropping below acceptable threshold for >30 seconds.
+ALERT CatalogueServiceHealthWarning
+  IF sum by (service) (max_over_time(consul_health_service_status{service="catalogue-service-admin"}[30s])) < 2
+    FOR 30s
+    LABELS {
+        severity="page"
+    }
+ANNOTATIONS {
+    summary = "Catalogue service becoming unhealthy",
+    description = "Only {{$value}} healthy catalogue instances available for more than 30 seconds."
+}
+
+# Alert for Shop app has no registered instances for >30 seconds.
+ALERT ShopAppNoInstances
+  IF absent(max_over_time(consul_health_service_status{service="shop-application-admin"}[30s])) == 1
+    FOR 30s
+    LABELS {
+        severity="page"
+    }
+ANNOTATIONS {
+    summary = "Shop app has no registered instances",
+    description = "All instances of shop app have been down for more than 30 seconds."
+}
+
+# Alert for Shop app healthy count dropping below acceptable threshold for >30 seconds.
+ALERT ShopAppIsUnhealthy
+  IF sum by (service) (max_over_time(consul_health_service_status{service="shop-application-admin"}[30s])) < 1
+    FOR 30s
+    LABELS {
+        severity="page"
+    }
+ANNOTATIONS {
+    summary = "Shop app is unhealthy",
+    description = "Shop app has been unhealthy for more than 30 seconds."
+}
