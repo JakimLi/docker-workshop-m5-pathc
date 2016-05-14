@@ -1,0 +1,12 @@
+global:
+  smtp_smarthost: 'localhost:25'
+  smtp_from: 'alertmanager@example.org'
+route:
+  receiver: 'vagrant'
+  group_by: ['notify_by_email']
+  repeat_interval: 3h
+
+receivers:
+  - name: 'vagrant'
+    email_configs:
+  - to: 'vagrant@localhost'
